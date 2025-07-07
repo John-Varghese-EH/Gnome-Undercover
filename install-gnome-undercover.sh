@@ -32,4 +32,28 @@ wget -O arc-menu.zip https://extensions.gnome.org/extension-data/arc-menu@linxge
 unzip -o dash-to-panel.zip -d "$EXT_DIR/dash-to-panel@jderose9.github.com"
 unzip -o arc-menu.zip -d "$EXT_DIR/arc-menu@linxgem33.com"
 
+echo "[*] Creating Gnome-Undercover application launcher..."
+
+LAUNCHER_PATH="$HOME/.local/share/applications/gnome-undercover.desktop"
+SCRIPT_PATH="$(realpath ./gnome-undercover.sh)"
+ICON_PATH="$(realpath ./gnome-undercover.png)"
+
+cat > "$LAUNCHER_PATH" <<EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Gnome-Undercover
+Comment=Toggle GNOME and Windows-like appearance
+Exec=env bash "$SCRIPT_PATH"
+Icon=$ICON_PATH
+Terminal=false
+Categories=Utility;
+StartupWMClass=Gnome-Undercover
+EOF
+
+chmod +x "$SCRIPT_PATH"
+chmod +x "$LAUNCHER_PATH"
+
+echo "[*] Gnome-Undercover launcher created. It will appear in your application list after you log out and log back in, or you can run 'gtk-update-icon-cache' and 'update-desktop-database' to refresh immediately."
+
 echo "[*] Installation complete. You can now run ./gnome-undercover.sh to toggle modes."
