@@ -2,9 +2,14 @@
 
 **Seamlessly transform your GNOME desktop into a convincing Windows environment and back—instantly, with one command or click.**
 
+Gnome-Undercover is a powerful tool that toggles your GNOME desktop between its native look and a polished Windows-like appearance. Whether you need privacy in public, a professional disguise, or just want to refresh your workspace, Gnome-Undercover makes it effortless.
+
 ---
 
-Gnome-Undercover is a powerful tool that toggles your GNOME desktop between its native look and a polished Windows-like appearance. Whether you need privacy in public, a professional disguise, or just want to refresh your workspace, Gnome-Undercover makes it effortless.
+> [!NOTE]
+> **🚧 Work in Progress:**  
+> Gnome-Undercover is still evolving! Help make it better and faster—contributions, feedback, and ideas are warmly welcome.  
+> *Star the repo and join the project!*
 
 ---
 
