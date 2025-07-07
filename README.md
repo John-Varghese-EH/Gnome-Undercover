@@ -95,6 +95,20 @@ rm -f ~/.local/share/applications/gnome-undercover.desktop
 ```
 ---
 
+## 🕵️ Inspiration: Kali Undercover & Why Gnome-Undercover
+
+The popular **Kali Undercover** mode is a fantastic tool for quickly disguising your Kali Linux desktop to look like Windows, providing privacy and blending in during sensitive situations. However, **Kali Undercover has a major limitation: it only supports the Xfce desktop environment**, which is the default for Kali Linux.  
+If you use GNOME—a modern, user-friendly, and highly customizable desktop environment—Kali Undercover simply won’t work for you.
+
+**Why GNOME?**  
+GNOME is increasingly popular among Kali users for its intuitive interface, advanced productivity features, and extensive customization options. With GNOME, you can enjoy a seamless workflow, elegant design, and access to a wide range of extensions and themes, making it a preferred choice for both new and experienced users.
+
+> *“Kali Linux, a powerful Debian-based distribution widely used for advanced penetration testing and network security assessments, boasts a highly customizable environment. One popular option for enhancing the user interface and improving overall usability is to install GNOME on Kali Linux, a user-friendly desktop environment.”* 
+
+**Gnome-Undercover** fills this gap by bringing undercover functionality to GNOME, allowing Kali users (and anyone running GNOME) to instantly switch between their native desktop and a convincing Windows-like environment—something Kali Undercover cannot do.
+
+---
+
 ## 🙏 Credits
 
 - [B00merang Project](https://github.com/B00merang-Project) for Windows 10 themes and icons  
