@@ -109,6 +109,19 @@ GNOME is increasingly popular among Kali users for its intuitive interface, adva
 
 ---
 
+## 🎉 Fun Add-on: Activate-linux
+
+Want to take your Windows disguise to the next level?  
+Pair Gnome-Undercover with [activate-linux](https://github.com/MrGlockenspiel/activate-linux)—a hilarious open-source prank that displays the classic “Activate Windows” watermark on your Linux desktop!
+
+> **Description:**  
+> _Fool your friends, colleagues, or even yourself with a touch of Windows authenticity. **Activate-linux** is the perfect companion for your undercover adventures!_
+
+**Try it out:**  
+[github.com/MrGlockenspiel/activate-linux](https://github.com/MrGlockenspiel/activate-linux)
+
+---
+
 ## 🙏 Credits
 
 - [B00merang Project](https://github.com/B00merang-Project) for Windows 10 themes and icons  
