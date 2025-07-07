@@ -1,4 +1,4 @@
-# Gnome-Undercover
+# Gnome-Undercover 🕵🏻
 
 **Seamlessly transform your GNOME desktop into a convincing Windows environment and back—instantly, with one command or click.**
 
