@@ -141,5 +141,11 @@ Pair Gnome-Undercover with [activate-linux](https://github.com/MrGlockenspiel/ac
 
 ---
 
-> Crafted with ❤️ by **[John Varghese](https://github.com/John-Varghese-EH)**  
-> [github.com/John-Varghese-EH/Gnome-Undercover](https://github.com/John-Varghese-EH/Gnome-Undercover)
+  [![Buy me a Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/CyberTrinity)
+  [![Patreon](https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white)](https://patreon.com/CyberTrinity)
+  [![Sponsor](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#white)](https://github.com/sponsors/John-Varghese-EH)
+
+---
+
+ Crafted with ❤️ by **[John Varghese](https://github.com/John-Varghese-EH)**  
+ [github.com/John-Varghese-EH/Gnome-Undercover](https://github.com/John-Varghese-EH/Gnome-Undercover)
