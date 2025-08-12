@@ -1,0 +1,8 @@
+{
+    "name": "GNOME Undercover",
+    "description": "A button to switch between GNOME and a Windows 11 look.",
+    "uuid": "gnome-undercover@John-Varghese-EH",
+    "shell-version": ["45", "46", "47", "48"],
+    "url": "",
+    "version": 1
+}
