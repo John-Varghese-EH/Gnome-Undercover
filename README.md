@@ -2,7 +2,7 @@
 
 **Seamlessly transform your GNOME desktop into a convincing Windows 11 environment and back—instantly, with one command or click.**
 
-This project is an enhanced version of the original Gnome-Undercover concept, rebuilt to use modern Windows 11 themes and a more robust installation process. It provides a simple, one-click script that transforms your GNOME desktop into a polished Windows 11 look-alike, and safely restores your original settings when you switch back.
+This project GNOME-Undercover is to use modern Windows 11 themes and a more robust installation process. It provides a simple, one-click script that transforms your GNOME desktop into a polished Windows 11 look-alike, and safely restores your original settings when you switch back.
 
 ---
 
