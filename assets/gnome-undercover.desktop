@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=GNOME Undercover
+Comment=Switch between GNOME and a Windows 11 look
+Exec=gnome-undercover.sh
+Icon=gnome-undercover
+Terminal=false
+Type=Application
+Categories=Utility;System;
+StartupNotify=true
+Keywords=Theme;Windows;Kali;Undercover;GNOME;
