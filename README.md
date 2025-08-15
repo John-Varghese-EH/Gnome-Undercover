@@ -1,30 +1,27 @@
 # GNOME Undercover 🕵🏻
 
-**Seamlessly transform your GNOME desktop into a convincing Windows 11 environment and back—instantly, with one command or click.**
+**Seamlessly transform your GNOME desktop into a convincing Windows 11 environment and back—instantly.**
 
-This project is an enhanced version of the original Gnome-Undercover concept, rebuilt to use modern Windows 11 themes and a more robust installation process. It provides a simple, one-click script that transforms your GNOME desktop into a polished Windows 11 look-alike, and safely restores your original settings when you switch back.
+This project provides a simple, graphical installer to transform your modern GNOME desktop into a polished Windows 11 look-alike, and a one-click script to switch back and forth.
 
----
-
-> [!NOTE]
-> **🚧 Work in Progress:**  
-> This project is actively being developed! Help make it better and faster—contributions, feedback, and ideas are warmly welcome.
-> *Star the repo and join the project!*
+It's perfect for privacy, for working in public spaces, or for users who prefer the Windows UI but love the power of Linux underneath.
 
 ---
 
 ## ✨ Features
 
-- **One-Click Transformation:** Instantly switch between your native GNOME desktop and a Windows 11 look.
+- **Graphical Installation Wizard:** A user-friendly, step-by-step installer guides you through the setup.
+- **Interactive Customization:** Choose your favorite accent color and visual tweaks during installation.
+- **One-Click Transformation:** After installation, instantly switch between your native GNOME desktop and the Windows 11 look.
 - **Complete Visual Overhaul:** Changes the GTK, Shell, icon, and cursor themes, plus the wallpaper.
-- **Authentic Windows 11 Shell:** Automatically enables and configures Dash to Panel and Arc Menu to create a convincing taskbar and start menu.
-- **Safe Backup & Restore:** Your original theme and extension settings are safely backed up before the first switch and perfectly restored when you toggle back.
-- **Easy to Use:** Launch the switcher from your applications menu or a dedicated panel button.
-- **Automated Installation:** A single, user-friendly script handles all dependencies and setup.
+- **Authentic Windows 11 Shell:** Automatically configures Dash to Panel and Arc Menu to create a convincing taskbar and start menu.
+- **Safe Backup & Restore:** Your original theme settings are safely backed up and restored when you toggle the theme.
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Installation
+
+The installation is handled by a graphical wizard.
 
 ### 1. Clone the Repository
 
@@ -35,17 +32,13 @@ cd Gnome-Undercover
 
 ### 2. Run the Installer
 
-This script will guide you through the process, asking for `sudo` permission only when needed to install required system packages.
+The installer will first check for necessary dependencies (like `git`, `python3-gi`, etc.) and guide you through installing them if they are missing.
 
 ```bash
-chmod +x install.sh
-./install.sh
+python3 installer_gui/main.py
 ```
 
-The installer will guide you through the following steps:
-1.  **Dependency Check:** It will verify you have all the necessary software and ask for permission to install anything that's missing.
-2.  **Theme Customization:** It will present you with an interactive menu to choose your preferred color theme and enable optional tweaks like the blur effect.
-3.  **Installation:** It will then download and install all the themes, icons, scripts, and extensions based on your selections.
+Follow the on-screen instructions in the wizard to customize and install the theme suite.
 
 ---
 
@@ -57,7 +50,7 @@ After installation, you can switch between "Windows 11 Mode" and your original G
   Search for “GNOME Undercover” in your applications and click the icon to toggle modes.
 
 - **From the Panel:**
-  Click the new icon in your top panel to toggle modes.
+  Click the new icon in your panel to toggle modes.
 
 **How it Works:**
 - **First run:** Your original GNOME settings are backed up, and the Windows 11 look is applied.
@@ -67,13 +60,14 @@ After installation, you can switch between "Windows 11 Mode" and your original G
 
 ## 🧹 Uninstallation
 
-To completely remove Gnome-Undercover and all its components, run the uninstallation script from the project directory:
+Currently, uninstallation is a manual process. A future version of the graphical installer will include an uninstallation option.
 
-```bash
-chmod +x uninstall.sh
-./uninstall.sh
-```
-This will safely restore your original settings, remove all installed themes and icons, and delete the scripts and launchers.
+To manually remove the components, you will need to:
+1.  Delete the theme files from `~/.themes` and `~/.icons`.
+2.  Delete the core script from `~/.local/bin`.
+3.  Delete the `.desktop` file from `~/.local/share/applications`.
+4.  Disable and remove the `gnome-undercover@...` extension from `~/.local/share/gnome-shell/extensions`.
+5.  Delete the configuration directory at `~/.config/gnome-undercover`.
 
 ---
 
@@ -90,4 +84,4 @@ This project stands on the shoulders of giants. It would not be possible without
 
 ## 📜 License
 
-This project is licensed under the **GPLv3**. See the `LICENSE` file for details.
+This project is licensed under the **GPLv3**.
