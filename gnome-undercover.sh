@@ -5,10 +5,10 @@
 set -euo pipefail
 
 # --- CONFIGURATION ---
-WIN_THEME="Windows-10"
-WIN_ICONS="Windows-10"
-WIN_SHELL_THEME="Windows-10"
-WIN_WALLPAPER="/usr/share/backgrounds/Windows10/win10-wallpaper.jpg"
+WIN_THEME="Fluent-round-teal-Dark"
+WIN_ICONS="Fluent-teal-Dark"
+WIN_SHELL_THEME="Fluent-round-teal-Dark"
+WIN_WALLPAPER="$HOME/.local/share/backgrounds/gnome-undercover/wallpaper.png"
 WIN_TERMINAL_PROFILE_NAME="Windows10"
 WIN_EXTENSIONS=("dash-to-panel@jderose9.github.com" "arc-menu@linxgem33.com")
 
