@@ -6,12 +6,12 @@ STATE_FILE="$CONFIG_DIR/state"
 ORIGINAL_SETTINGS_FILE="$CONFIG_DIR/original_settings.conf"
 
 # Theme names will be refined during testing. These are based on the research.
-WINDOWS_GTK_THEME="Fluent-round-Dark"
-WINDOWS_SHELL_THEME="Fluent-round-Dark"
-WINDOWS_ICON_THEME="Fluent-Dark"
+WINDOWS_GTK_THEME="Fluent-round-teal-Dark"
+WINDOWS_SHELL_THEME="Fluent-round-teal-Dark"
+WINDOWS_ICON_THEME="Fluent-teal-Dark"
 WINDOWS_CURSOR_THEME="Bibata-Modern-Ice"
 # Wallpaper path will be determined by the installer. Using a placeholder.
-WINDOWS_WALLPAPER_URI="file:///usr/share/backgrounds/gnome-undercover/wallpaper.jpg"
+WINDOWS_WALLPAPER_URI="file://$HOME/.local/share/backgrounds/gnome-undercover/wallpaper.png"
 
 # Extension UUIDs
 DASH_TO_PANEL_UUID="dash-to-panel@jderose9.github.com"
