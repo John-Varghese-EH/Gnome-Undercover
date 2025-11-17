@@ -5,13 +5,17 @@ CONFIG_DIR="$HOME/.config/gnome-undercover"
 STATE_FILE="$CONFIG_DIR/state"
 ORIGINAL_SETTINGS_FILE="$CONFIG_DIR/original_settings.conf"
 
-# Theme names will be refined during testing. These are based on the research.
-WINDOWS_GTK_THEME="Fluent-round-Dark"
-WINDOWS_SHELL_THEME="Fluent-round-Dark"
-WINDOWS_ICON_THEME="Fluent-Dark"
+# Set default theme settings if not defined in settings.conf
+: "${THEME_COLOR:="teal"}"
+: "${THEME_MODE:="Dark"}"
+
+# Dynamically generate theme names
+WINDOWS_GTK_THEME="Fluent-round-${THEME_COLOR}-${THEME_MODE}"
+WINDOWS_SHELL_THEME="Fluent-round-${THEME_COLOR}-${THEME_MODE}"
+WINDOWS_ICON_THEME="Fluent-${THEME_COLOR}-${THEME_MODE}"
 WINDOWS_CURSOR_THEME="Bibata-Modern-Ice"
 # Wallpaper path will be determined by the installer. Using a placeholder.
-WINDOWS_WALLPAPER_URI="file:///usr/share/backgrounds/gnome-undercover/wallpaper.jpg"
+WINDOWS_WALLPAPER_URI="file://$HOME/.local/share/backgrounds/gnome-undercover/wallpaper.png"
 
 # Extension UUIDs
 DASH_TO_PANEL_UUID="dash-to-panel@jderose9.github.com"
@@ -20,6 +24,12 @@ USER_THEMES_UUID="user-theme@gnome-shell-extensions.gcampax.github.io"
 
 # Ensure config directory exists
 mkdir -p "$CONFIG_DIR"
+
+# Load user settings
+SETTINGS_FILE="$CONFIG_DIR/settings.conf"
+if [ -f "$SETTINGS_FILE" ]; then
+    source "$SETTINGS_FILE"
+fi
 
 function save_original_settings() {
     if [ ! -f "$ORIGINAL_SETTINGS_FILE" ]; then
@@ -136,8 +146,10 @@ function configure_arcmenu_windows() {
     # Apply Windows 11 settings
     gsettings set $schema menu-layout 'Eleven'
     gsettings set $schema menu-button-icon 'Custom_Icon'
-    # This assumes the Fluent theme places an icon here. This path might need adjustment in the installer.
-    gsettings set $schema custom-menu-button-icon '/usr/share/icons/Fluent-Dark/apps/scalable/start-here.svg'
+    # Use the icon path from the settings file
+    if [ -n "$ARCMENU_ICON_PATH" ]; then
+        gsettings set $schema custom-menu-button-icon "$ARCMENU_ICON_PATH"
+    fi
     gsettings set $schema position-in-panel 'Center'
 }
 
