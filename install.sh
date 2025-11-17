@@ -11,6 +11,8 @@ ICONS_DIR_USER="$HOME/.icons"
 EXTENSIONS_DIR_USER="$HOME/.local/share/gnome-shell/extensions"
 APPLICATIONS_DIR_USER="$HOME/.local/share/applications"
 SCRIPTS_DIR_USER="$HOME/.local/bin"
+CONFIG_DIR_USER="$HOME/.config/gnome-undercover"
+SETTINGS_FILE="$CONFIG_DIR_USER/settings.conf"
 
 # Theme and extension repositories
 FLUENT_GTK_THEME_REPO="https://github.com/vinceliuice/Fluent-gtk-theme.git"
@@ -89,9 +91,6 @@ install_core_files() {
     cp "scripts/gnome-undercover.sh" "$SCRIPTS_DIR_USER/gnome-undercover"
     chmod +x "$SCRIPTS_DIR_USER/gnome-undercover"
 
-    # Update wallpaper path in script
-    sed -i "s|file:///usr/share/backgrounds/gnome-undercover/wallpaper.jpg|file://$HOME/.local/share/backgrounds/gnome-undercover/wallpaper.png|g" "$SCRIPTS_DIR_USER/gnome-undercover"
-
     # Install the .desktop file
     mkdir -p "$APPLICATIONS_DIR_USER"
     cp "assets/gnome-undercover.desktop" "$APPLICATIONS_DIR_USER/"
@@ -105,6 +104,14 @@ install_core_files() {
         mkdir -p "$HOME/.local/share/icons/hicolor/scalable/apps"
         cp "$icon_path" "$HOME/.local/share/icons/hicolor/scalable/apps/gnome-undercover.svg"
         gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor"
+
+        # Create settings file and write the icon path to it
+        mkdir -p "$CONFIG_DIR_USER"
+        {
+            echo "ARCMENU_ICON_PATH='$icon_path'"
+            echo "THEME_COLOR='teal'"
+            echo "THEME_MODE='Dark'"
+        } > "$SETTINGS_FILE"
     else
         msg "Warning: Could not find a suitable icon for the .desktop file. The shortcut will not have an icon."
     fi
