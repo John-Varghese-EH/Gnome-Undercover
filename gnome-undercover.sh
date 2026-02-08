@@ -5,12 +5,18 @@
 set -euo pipefail
 
 # --- CONFIGURATION ---
-WIN_THEME="Fluent-round-teal-Dark"
-WIN_ICONS="Fluent-teal-Dark"
-WIN_SHELL_THEME="Fluent-round-teal-Dark"
+TARGET_VERSION="win11" # Default to Windows 11
+WIN11_THEME="Fluent-round-teal-Dark"
+WIN11_ICONS="Fluent-teal-Dark"
+WIN11_SHELL="Fluent-round-teal-Dark"
+
+WIN10_THEME="Windows-10-Dark"
+WIN10_ICONS="Windows-10"
+WIN10_SHELL="Fluent-round-teal-Dark" # Fallback or use Win10 if available
+
 WIN_WALLPAPER="$HOME/.local/share/backgrounds/gnome-undercover/wallpaper.png"
 WIN_TERMINAL_PROFILE_NAME="Windows10"
-WIN_EXTENSIONS=("dash-to-panel@jderose9.github.com" "arc-menu@linxgem33.com")
+WIN_EXTENSIONS=("dash-to-panel@jderose9.github.com" "arcmenu@arcmenu.com")
 
 BACKUP_DIR="$HOME/.config/gnome-undercover-backup"
 BACKUP_VERSION_FILE="$BACKUP_DIR/version"
@@ -58,11 +64,27 @@ function restore_settings() {
 }
 
 function apply_windows_theme() {
+    local theme=""
+    local icons=""
+    local shell=""
+    
+    if [[ "$TARGET_VERSION" == "win10" ]]; then
+        theme="$WIN10_THEME"
+        icons="$WIN10_ICONS"
+        shell="$WIN10_SHELL" # Ideally we'd have a Win10 shell theme too
+        notify "Applying Windows 10 theme..."
+    else
+        theme="$WIN11_THEME"
+        icons="$WIN11_ICONS"
+        shell="$WIN11_SHELL"
+        notify "Applying Windows 11 theme..."
+    fi
+
     # GTK, Shell, Icons, Wallpaper
-    _gsettings set org.gnome.desktop.interface gtk-theme "$WIN_THEME"
-    _gsettings set org.gnome.desktop.interface icon-theme "$WIN_ICONS"
-    _gsettings set org.gnome.desktop.wm.preferences theme "$WIN_THEME"
-    _gsettings set org.gnome.shell.extensions.user-theme name "$WIN_SHELL_THEME"
+    _gsettings set org.gnome.desktop.interface gtk-theme "$theme"
+    _gsettings set org.gnome.desktop.interface icon-theme "$icons"
+    _gsettings set org.gnome.desktop.wm.preferences theme "$theme"
+    _gsettings set org.gnome.shell.extensions.user-theme name "$shell"
     _gsettings set org.gnome.desktop.background picture-uri "file://$WIN_WALLPAPER"
 
     # GNOME Terminal profile (optional)
@@ -73,7 +95,35 @@ function apply_windows_theme() {
         _gnome_extensions enable "$ext" || true
     done
 
+    configure_extensions
+    
     notify "Switched to Windows-like appearance."
+}
+
+function configure_extensions() {
+    # ArcMenu: Set Layout
+    if [[ "$TARGET_VERSION" == "win10" ]]; then
+        _dconf write /org/gnome/shell/extensions/arcmenu/menu-layout "'Windows'" || true
+        _dconf write /org/gnome/shell/extensions/arcmenu/arc-menu-icon "'Custom_Icon'" || true
+        # Win10 icon path - might need adjustment if file names differ
+         _dconf write /org/gnome/shell/extensions/arcmenu/custom-menu-button-icon "'/usr/share/icons/Windows-10/scalable/places/start-here-symbolic.svg'" || true 
+         
+         # Dash to Panel: Left position
+         _dconf write /org/gnome/shell/extensions/dash-to-panel/panel-position "'BOTTOM'" || true
+         _dconf write /org/gnome/shell/extensions/dash-to-panel/taskbar-position "'LEFT'" || true
+    else
+         # Windows 11
+        _dconf write /org/gnome/shell/extensions/arcmenu/menu-layout "'Eleven'" || true
+        _dconf write /org/gnome/shell/extensions/arcmenu/arc-menu-icon "'Custom_Icon'" || true
+        _dconf write /org/gnome/shell/extensions/arcmenu/custom-menu-button-icon "'/usr/share/icons/Windows-10/scalable/places/start-here-symbolic.svg'" || true 
+        
+        # Dash to Panel: Center position
+        _dconf write /org/gnome/shell/extensions/dash-to-panel/panel-position "'BOTTOM'" || true
+        _dconf write /org/gnome/shell/extensions/dash-to-panel/taskbar-position "'CENTEREDMONITOR'" || true
+    fi
+    
+    _dconf write /org/gnome/shell/extensions/dash-to-panel/appicon-margin "4" || true
+    _dconf write /org/gnome/shell/extensions/dash-to-panel/trans-panel-opacity "0.8" || true
 }
 
 function set_terminal_profile() {
@@ -92,11 +142,36 @@ function set_terminal_profile() {
     done | head -n1)
     if [[ -n "$uuid" ]]; then
         _gsettings set org.gnome.Terminal.ProfilesList default "$uuid"
+    else
+        create_terminal_profile "$profile_name"
     fi
 }
 
+function create_terminal_profile() {
+    local profile_name="$1"
+    local uuid
+    uuid=$(uuidgen)
+    
+    # Create new profile
+    _gsettings set org.gnome.Terminal.ProfilesList list "$(_gsettings get org.gnome.Terminal.ProfilesList list | sed "s/]/, '$uuid']/")"
+    
+    local profile_path="org.gnome.Terminal.Legacy.Profile:/org/gnome/Terminal/Legacy/Profiles:/:$uuid/"
+    
+    _gsettings set "$profile_path" visible-name "$profile_name"
+    _gsettings set "$profile_path" background-color "'#0C0C0C'"
+    _gsettings set "$profile_path" foreground-color "'#CCCCCC'"
+    _gsettings set "$profile_path" use-theme-colors "false"
+    _gsettings set "$profile_path" use-system-font "false"
+    _gsettings set "$profile_path" font "'Monospace 10'" # Fallback standard
+    
+    # Set as default
+    _gsettings set org.gnome.Terminal.ProfilesList default "$uuid"
+}
+
 function is_windows_mode() {
-    [[ "$(_gsettings get org.gnome.desktop.interface gtk-theme)" == "'$WIN_THEME'" ]]
+    current_theme=$(_gsettings get org.gnome.desktop.interface gtk-theme)
+    # Check if either Win11 or Win10 theme is active
+    [[ "$current_theme" == "'$WIN11_THEME'" ]] || [[ "$current_theme" == "'$WIN10_THEME'" ]]
 }
 
 function disable_windows_mode() {
@@ -110,7 +185,18 @@ function enable_windows_mode() {
 
 # --- MAIN LOGIC ---
 function main() {
+    # Parse arguments
+    while [[ "$#" -gt 0 ]]; do
+        case $1 in
+            --win10) TARGET_VERSION="win10" ;;
+            --win11) TARGET_VERSION="win11" ;;
+            *) echo "Unknown parameter passed: $1"; exit 1 ;;
+        esac
+        shift
+    done
+
     check_dependencies
+
 
     if is_windows_mode; then
         disable_windows_mode

@@ -25,6 +25,11 @@ remove_themes() {
     rm -rf "$ICONS_DIR_USER/Fluent-Dark"
     rm -rf "$ICONS_DIR_USER/Fluent-teal-Dark"
     rm -rf "$ICONS_DIR_USER/Bibata-Modern-Ice"
+    rm -rf "$THEME_DIR_USER/Fluent-gtk-theme"
+    rm -rf "$ICONS_DIR_USER/Fluent-icon-theme"
+    rm -rf "$ICONS_DIR_USER/Bibata_Cursor"
+    rm -rf "$THEME_DIR_USER/Windows-10-Dark"
+    rm -rf "$ICONS_DIR_USER/Windows-10"
     # Add any other theme/icon directories that might be created
 }
 
@@ -32,7 +37,9 @@ remove_themes() {
 remove_core_files() {
     msg "Removing core script and assets..."
     rm -f "$SCRIPTS_DIR_USER/gnome-undercover"
+    rm -f "$SCRIPTS_DIR_USER/gnome-undercover-settings.py"
     rm -f "$APPLICATIONS_DIR_USER/gnome-undercover.desktop"
+    rm -f "$APPLICATIONS_DIR_USER/gnome-undercover-settings.desktop"
     rm -f "$HOME/.local/share/icons/hicolor/scalable/apps/gnome-undercover.svg"
     gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor" || true
     rm -rf "$BACKGROUNDS_DIR_USER/gnome-undercover"
@@ -48,6 +55,11 @@ remove_extension() {
     fi
 
     rm -rf "$EXTENSIONS_DIR_USER/$extension_uuid"
+    
+    # Remove extra extensions
+    rm -rf "$EXTENSIONS_DIR_USER/dash-to-panel@jderose9.github.com"
+    rm -rf "$EXTENSIONS_DIR_USER/arcmenu@arcmenu.com"
+
     msg "Extension removed."
 }
 

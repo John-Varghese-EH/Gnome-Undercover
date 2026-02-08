@@ -24,7 +24,49 @@ This project GNOME-Undercover is to use modern Windows 11 themes and a more robu
 
 ---
 
-## 🚀 Quick Start
+## 📦 Installation via Package Managers
+
+### 🐧 Debian/Ubuntu/Mint (`apt`)
+Hosted via **PPA** (Personal Package Archive).
+```bash
+sudo add-apt-repository ppa:john-varghese/gnome-undercover
+sudo apt update
+sudo apt install gnome-undercover
+```
+*(Note: You need to set up this PPA on Launchpad first)*
+
+### 🏹 Arch Linux/Manjaro (`pacman`)
+Available via **AUR** (Arch User Repository).
+```bash
+yay -S gnome-undercover
+```
+*(Note: You need to push the PKGBUILD to the AUR first)*
+
+### 🎩 Fedora/RedHat/OpenSUSE (`dnf`/`zypper`)
+Hosted via **COPR**.
+```bash
+sudo dnf install gnome-undercover
+```
+*(Note: You need to set up a COPR repository first)*
+
+### 🔧 Manual Install (`.deb` build)
+If you prefer building from source:
+
+1. Install build dependencies:
+   ```bash
+   sudo apt install devscripts build-essential debhelper dh-python python3-all python3-setuptools
+   ```
+2. Build the package:
+   ```bash
+   debuild -us -uc
+   ```
+3. Install:
+   ```bash
+   sudo dpkg -i ../gnome-undercover_*.deb
+   sudo apt install -f  # To fix any missing dependencies
+   ```
+
+## 🚀 Installation (Source)
 
 ### 1. Clone the Repository
 
@@ -38,8 +80,7 @@ cd Gnome-Undercover
 This script will guide you through the process, asking for `sudo` permission only when needed to install required system packages.
 
 ```bash
-chmod +x install.sh
-./install.sh
+./scripts/gnome-undercover-setup
 ```
 
 The installer will automatically:

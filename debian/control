@@ -1,0 +1,14 @@
+Source: gnome-undercover
+Section: gnome
+Priority: optional
+Maintainer: John Varghese <john@example.com>
+Build-Depends: debhelper (>= 12), python3, dh-python
+Standards-Version: 4.5.1
+Homepage: https://github.com/John-Varghese/Gnome-Undercover
+
+Package: gnome-undercover
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}, gnome-shell-extensions, gnome-tweaks, sassc, libglib2.0-dev, jq, make, gettext, fonts-liberation, python3-gi, gir1.2-gtk-4.0
+Description: Transform your GNOME desktop into Windows 10/11
+ Gnome-Undercover is a tool to make your GNOME desktop look and feel like Windows.
+ It installs themes, icons, and extensions to mimic the Windows experience.

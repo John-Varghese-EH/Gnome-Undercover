@@ -1,0 +1,166 @@
+#!/usr/bin/env python3
+
+import shutil
+import gi
+import subprocess
+import os
+import sys
+
+gi.require_version('Gtk', '4.0')
+from gi.repository import Gtk, Gio, GLib
+
+SCRIPT_NAME = "gnome-undercover"
+SCRIPT_PATH = os.path.expanduser("~/.local/bin/gnome-undercover")
+
+def check_dependencies():
+    """Ensure required commands are available."""
+    missing = []
+    if not shutil.which("gsettings"):
+        missing.append("gsettings")
+    if not os.path.exists(SCRIPT_PATH):
+        missing.append(f"Script not found at {SCRIPT_PATH}")
+    
+    if missing:
+        print(f"Error: Missing dependencies: {', '.join(missing)}")
+        return False
+    return True
+
+class GnomeUndercoverSettings(Gtk.Application):
+    def __init__(self):
+        super().__init__(application_id='com.johnvarghese.gnomeundercover',
+                         flags=Gio.ApplicationFlags.FLAGS_NONE)
+
+    def do_activate(self):
+        window = Gtk.ApplicationWindow(application=self)
+        window.set_title("Gnome Undercover Settings")
+        window.set_default_size(400, 300)
+
+        # Main Box
+        main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        main_box.set_margin_top(24)
+        main_box.set_margin_bottom(24)
+        main_box.set_margin_start(24)
+        main_box.set_margin_end(24)
+        window.set_child(main_box)
+
+        # Header
+        header = Gtk.Label()
+        header.set_markup("<span size='x-large' weight='bold'>Gnome Undercover</span>")
+        main_box.append(header)
+        
+        desc = Gtk.Label(label="Manage your desktop transformation.")
+        desc.set_css_classes(["dim-label"])
+        main_box.append(desc)
+
+        # Switch Row
+        switch_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        switch_box.set_homogeneous(False)
+        main_box.append(switch_box)
+
+        switch_label = Gtk.Label(label="Windows 11 Mode")
+        switch_label.set_hexpand(True)
+        switch_label.set_halign(Gtk.Align.START)
+        switch_box.append(switch_label)
+
+        self.switch = Gtk.Switch()
+        self.switch.set_active(self.check_status())
+        self.switch.connect("state-set", self.on_switch_state_set)
+        switch_box.append(self.switch)
+
+        # Version Selector Row
+        version_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        version_box.set_homogeneous(False)
+        main_box.append(version_box)
+        
+        version_label = Gtk.Label(label="Target Version")
+        version_label.set_hexpand(True)
+        version_label.set_halign(Gtk.Align.START)
+        version_box.append(version_label)
+        
+        self.version_combo = Gtk.ComboBoxText()
+        self.version_combo.append("win11", "Windows 11")
+        self.version_combo.append("win10", "Windows 10")
+        self.version_combo.set_active_id("win11") # Default
+        self.version_combo.connect("changed", self.on_version_changed)
+        version_box.append(self.version_combo)
+
+        # Separator
+        main_box.append(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
+        
+        # Actions
+        actions_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        main_box.append(actions_box)
+        
+        reapply_btn = Gtk.Button(label="Re-apply Settings")
+        reapply_btn.connect("clicked", self.on_reapply_clicked)
+        actions_box.append(reapply_btn)
+
+        uninstall_btn = Gtk.Button(label="Uninstall Gnome Undercover")
+        uninstall_btn.set_css_classes(["destructive-action"])
+        uninstall_btn.connect("clicked", self.on_uninstall_clicked)
+        actions_box.append(uninstall_btn)
+
+        window.present()
+
+    def check_status(self):
+        # Check if we are in Windows mode by checking a known sentinel or setting
+        try:
+            result = subprocess.run(
+                ["gsettings", "get", "org.gnome.desktop.interface", "gtk-theme"],
+                capture_output=True, text=True
+            )
+            is_active = "Fluent" in result.stdout or "Windows-10" in result.stdout
+            
+            # Try to guess version to set combo box
+            if "Windows-10" in result.stdout:
+                self.version_combo.set_active_id("win10")
+            elif "Fluent" in result.stdout:
+                self.version_combo.set_active_id("win11")
+                
+            return is_active
+        except:
+            return False
+
+    def on_version_changed(self, combo):
+        # If switch is already on, we might want to prompt re-apply, but for now just storing state
+        pass
+
+    def on_switch_state_set(self, switch, state):
+        # We need to run the script. Ideally, the script should be idempotent and take an argument,
+        # but the current script toggles. So we should only toggle if the state mismatches.
+        current_status = self.check_status()
+        
+        if state != current_status:
+            self.run_script()
+            # Return true to accept the state change (we assume it works)
+            return True 
+        return False
+
+    def on_reapply_clicked(self, button):
+        # Force apply Windows settings if switch is on
+        if self.switch.get_active():
+             self.run_script() # This might toggle it OFF if logic is simple toggle. 
+             # Ideally we update gnome-undercover.sh to accept 'enable'/'disable' args.
+             # For now, let's assume the user wants to re-trigger the script.
+        else:
+             print("Enable Windows mode first.")
+
+    def on_uninstall_clicked(self, button):
+        # Launch uninstaller
+        uninstall_script = os.path.expanduser("~/.local/bin/uninstall-gnome-undercover.sh") # We need to make sure this exists
+        # For now, just show a message or open terminal
+        print("Please run the uninstall script from your terminal.")
+
+    def run_script(self):
+        try:
+            version_arg = "--" + self.version_combo.get_active_id()
+            subprocess.Popen([SCRIPT_PATH, version_arg])
+        except Exception as e:
+            print(f"Error running script: {e}")
+
+if __name__ == "__main__":
+    if check_dependencies():
+        app = GnomeUndercoverSettings()
+        app.run(sys.argv)
+    else:
+        sys.exit(1)

@@ -14,8 +14,13 @@ WINDOWS_GTK_THEME="Fluent-round-${THEME_COLOR}-${THEME_MODE}"
 WINDOWS_SHELL_THEME="Fluent-round-${THEME_COLOR}-${THEME_MODE}"
 WINDOWS_ICON_THEME="Fluent-${THEME_COLOR}-${THEME_MODE}"
 WINDOWS_CURSOR_THEME="Bibata-Modern-Ice"
-# Wallpaper path will be determined by the installer. Using a placeholder.
-WINDOWS_WALLPAPER_URI="file://$HOME/.local/share/backgrounds/gnome-undercover/wallpaper.png"
+# Wallpaper path
+if [ -f "/usr/share/backgrounds/gnome-undercover/wallpaper.png" ]; then
+    WALLPAPER_PATH="/usr/share/backgrounds/gnome-undercover/wallpaper.png"
+else
+    WALLPAPER_PATH="$HOME/.local/share/backgrounds/gnome-undercover/wallpaper.png"
+fi
+WINDOWS_WALLPAPER_URI="file://$WALLPAPER_PATH"
 
 # Extension UUIDs
 DASH_TO_PANEL_UUID="dash-to-panel@jderose9.github.com"

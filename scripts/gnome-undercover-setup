@@ -1,0 +1,256 @@
+#!/bin/bash
+
+# Exit immediately if a command exits with a non-zero status.
+set -e
+
+# --- Configuration ---
+SCRIPT_NAME="GNOME Undercover Installer"
+TEMP_DIR="/tmp/gnome-undercover-build"
+THEME_DIR_USER="$HOME/.themes"
+ICONS_DIR_USER="$HOME/.icons"
+EXTENSIONS_DIR_USER="$HOME/.local/share/gnome-shell/extensions"
+APPLICATIONS_DIR_USER="$HOME/.local/share/applications"
+SCRIPTS_DIR_USER="$HOME/.local/bin"
+CONFIG_DIR_USER="$HOME/.config/gnome-undercover"
+SETTINGS_FILE="$CONFIG_DIR_USER/settings.conf"
+
+# Theme and extension repositories
+FLUENT_GTK_THEME_REPO="https://github.com/vinceliuice/Fluent-gtk-theme.git"
+FLUENT_ICON_THEME_REPO="https://github.com/vinceliuice/Fluent-icon-theme.git"
+BIBATA_CURSOR_THEME_REPO="https://github.com/KaizIqbal/Bibata_Cursor.git"
+WINDOWS_10_THEME_REPO="https://github.com/B00merang-Project/Windows-10.git"
+WINDOWS_10_THEME_REPO="https://github.com/B00merang-Project/Windows-10.git"
+WINDOWS_10_ICONS_REPO="https://github.com/B00merang-Project/Windows-10-Icons.git"
+
+# Detect source directory
+if [ -d "/usr/share/gnome-undercover" ]; then
+    SOURCE_ROOT="/usr/share/gnome-undercover"
+    IS_SYSTEM_INSTALL=true
+else
+    SOURCE_ROOT="."
+    IS_SYSTEM_INSTALL=false
+fi
+
+# --- Helper Functions ---
+
+# Function to safely clone or update a repo
+git_clone_or_update() {
+    local repo_url="$1"
+    local dest_dir="$2"
+    
+    if [ -d "$dest_dir" ]; then
+        msg "Directory $dest_dir already exists. Skipping clone (or updating)..."
+        # Optional: (cd "$dest_dir" && git pull)
+    else
+        git clone "$repo_url" "$dest_dir"
+    fi
+}
+
+# Function to print messages
+msg() {
+    echo "✔  $1"
+}
+
+# Function to print error messages
+error() {
+    echo "✖  $1" >&2
+    exit 1
+}
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# --- Installation Functions ---
+
+# 1. Install Dependencies
+install_dependencies() {
+    msg "Checking and installing dependencies..."
+    if command_exists apt; then
+        sudo apt update
+        sudo apt install -y git gnome-shell-extensions gnome-tweaks sassc libglib2.0-dev jq make gettext fonts-liberation python3-gi gir1.2-gtk-4.0
+    elif command_exists dnf; then
+        sudo dnf install -y git gnome-shell-extensions gnome-tweaks sassc glib2-devel jq make gettext liberation-fonts python3-gobject gtk4
+    elif command_exists pacman; then
+    elif command_exists pacman; then
+        sudo pacman -Syu --noconfirm git gnome-shell-extensions gnome-tweaks sassc glib2 jq make gettext ttf-liberation python-gobject gtk4
+    elif command_exists zypper; then
+        sudo zypper install -y git gnome-shell-extensions gnome-tweaks sassc glib2-devel jq make gettext liberation-fonts python3-gobject gtk4
+    else
+        error "Unsupported package manager. Please install dependencies manually: git, gnome-shell-extensions, gnome-tweaks, sassc, jq, glib2-devel, make, gettext, liberation-fonts (or equivalent)."
+    fi
+    msg "Dependencies installed."
+}
+
+# 2. Clone and Install Themes
+install_themes() {
+    msg "Creating temporary directory for theme installation..."
+    rm -rf "$TEMP_DIR"
+    mkdir -p "$TEMP_DIR"
+    cd "$TEMP_DIR"
+
+    msg "Clone/Install Fluent GTK theme..."
+    git_clone_or_update "$FLUENT_GTK_THEME_REPO" "Fluent-gtk-theme"
+    (cd Fluent-gtk-theme && ./install.sh --tweaks round -c dark -t teal --dest "$THEME_DIR_USER")
+
+    msg "Clone/Install Fluent icon theme..."
+    git_clone_or_update "$FLUENT_ICON_THEME_REPO" "Fluent-icon-theme"
+    (cd Fluent-icon-theme && ./install.sh -c teal --dest "$ICONS_DIR_USER")
+
+    msg "Clone/Install Bibata cursor theme..."
+    git_clone_or_update "$BIBATA_CURSOR_THEME_REPO" "Bibata_Cursor"
+    (cd Bibata_Cursor && ./install.sh) 
+
+    msg "Clone/Install Windows 10 themes..."
+    git_clone_or_update "$WINDOWS_10_THEME_REPO" "Windows-10"
+    mkdir -p "$THEME_DIR_USER/Windows-10-Dark"
+    cp -r Windows-10/* "$THEME_DIR_USER/Windows-10-Dark/"
+    
+    git_clone_or_update "$WINDOWS_10_ICONS_REPO" "Windows-10-Icons"
+    mkdir -p "$ICONS_DIR_USER/Windows-10"
+    cp -r Windows-10-Icons/* "$ICONS_DIR_USER/Windows-10/"
+
+    # Copy wallpaper
+    msg "Installing wallpaper..."
+    mkdir -p "$HOME/.local/share/backgrounds/gnome-undercover"
+    cp "$TEMP_DIR/Fluent-gtk-theme/wallpaper/fluent-wallpaper-dark.png" "$HOME/.local/share/backgrounds/gnome-undercover/wallpaper.png"
+    # We might want a Win10 specific wallpaper too, but using Fluent one for now as fallback or default
+    
+    msg "Themes and icons installed."
+}
+
+# 3. Install Core Script and Assets
+install_core_files() {
+    msg "Installing core script and assets..."
+
+    # Install the main script only if not a system install
+    if [ "$IS_SYSTEM_INSTALL" = false ]; then
+        mkdir -p "$SCRIPTS_DIR_USER"
+        cp "$SOURCE_ROOT/scripts/gnome-undercover" "$SCRIPTS_DIR_USER/gnome-undercover"
+        chmod +x "$SCRIPTS_DIR_USER/gnome-undercover"
+        msg "Installed gnome-undercover to $SCRIPTS_DIR_USER"
+    else
+        msg "System install detected. Skipping script copy to ~/.local/bin."
+    fi
+
+    # Install the .desktop file
+    mkdir -p "$APPLICATIONS_DIR_USER"
+    cp "$SOURCE_ROOT/assets/gnome-undercover.desktop" "$APPLICATIONS_DIR_USER/"
+
+    # Install the icon for the .desktop file
+    local icon_to_find="start-here.svg"
+    local icon_path=$(find "$ICONS_DIR_USER/Fluent-Dark" -name "$icon_to_find" -o -name "distributor-logo-windows.svg" | head -n 1)
+
+    if [ -n "$icon_path" ]; then
+        msg "Found icon for desktop shortcut at $icon_path"
+        mkdir -p "$HOME/.local/share/icons/hicolor/scalable/apps"
+        cp "$icon_path" "$HOME/.local/share/icons/hicolor/scalable/apps/gnome-undercover.svg"
+        gtk-update-icon-cache -f -t "$HOME/.local/share/icons/hicolor"
+
+        # Create settings file and write the icon path to it
+        mkdir -p "$CONFIG_DIR_USER"
+        {
+            echo "ARCMENU_ICON_PATH='$icon_path'"
+            echo "THEME_COLOR='teal'"
+            echo "THEME_MODE='Dark'"
+        } > "$SETTINGS_FILE"
+    else
+        msg "Warning: Could not find a suitable icon for the .desktop file. The shortcut will not have an icon."
+    fi
+
+    # Install Settings App
+    msg "Installing configuration app..."
+    
+    if [ "$IS_SYSTEM_INSTALL" = false ]; then
+        cp "$SOURCE_ROOT/scripts/gnome-undercover-settings" "$SCRIPTS_DIR_USER/gnome-undercover-settings"
+        chmod +x "$SCRIPTS_DIR_USER/gnome-undercover-settings"
+        EXEC_PATH="$SCRIPTS_DIR_USER/gnome-undercover-settings"
+    else
+        msg "System install detected. Skipping settings app copy."
+        EXEC_PATH="/usr/bin/gnome-undercover-settings"
+    fi
+    
+    # Create Desktop Entry for Settings App
+    cat <<EOF > "$APPLICATIONS_DIR_USER/gnome-undercover-settings.desktop"
+[Desktop Entry]
+Name=Gnome Undercover Settings
+Comment=Configure Gnome Undercover
+Exec=$EXEC_PATH
+Icon=preferences-system
+Terminal=false
+Type=Application
+Categories=Settings;
+EOF
+
+    msg "Core files installed."
+}
+
+# 4. Install GNOME Shell Extension
+install_extension() {
+    msg "Installing GNOME Shell extension..."
+    local extension_uuid
+    extension_uuid=$(jq -r '.uuid' "gnome-undercover-extension/metadata.json")
+
+    if [ -z "$extension_uuid" ]; then
+        error "Could not read UUID from metadata.json. Is 'jq' installed?"
+    fi
+
+    local target_dir="$EXTENSIONS_DIR_USER/$extension_uuid"
+    mkdir -p "$target_dir"
+    cp -r "$SOURCE_ROOT/gnome-undercover-extension/"* "$target_dir/"
+
+    msg "Enabling extensions... You may need to log out and back in for all changes to take effect."
+    gnome-extensions enable "user-theme@gnome-shell-extensions.gcampax.github.io"
+    gnome-extensions enable "$extension_uuid"
+
+    msg "Extension installed and enabled."
+}
+
+# 5. Install Extra Extensions (Dash to Panel & ArcMenu)
+install_extra_extensions() {
+    msg "Installing Dash to Panel and ArcMenu..."
+    
+    # Dash to Panel
+    # Dash to Panel
+    msg "Cloning Dash to Panel..."
+    git_clone_or_update "https://github.com/home-sweet-gnome/dash-to-panel.git" "dash-to-panel"
+    (
+        cd "$TEMP_DIR/dash-to-panel" 
+        make install
+    )
+    msg "Dash to Panel installed."
+
+    # ArcMenu
+    # ArcMenu
+    msg "Cloning ArcMenu..."
+    git_clone_or_update "https://gitlab.com/arcmenu/ArcMenu.git" "ArcMenu"
+    (
+        cd "$TEMP_DIR/ArcMenu"
+        make install
+    )
+    msg "ArcMenu installed."
+    
+    msg "Enabling extra extensions..."
+    gnome-extensions enable "dash-to-panel@jderose9.github.com"
+    gnome-extensions enable "arcmenu@arcmenu.com" # Note: UUID might differ, checking...
+    # ArcMenu often uses arcmenu@arcmenu.com or arc-menu@linxgem33.com depending on version. 
+    # The make install usually installs to arcmenu@arcmenu.com
+
+
+# --- Main Execution ---
+
+main() {
+    echo "--- $SCRIPT_NAME ---"
+    install_dependencies
+    install_themes
+    install_core_files
+    install_extension
+    install_extra_extensions
+    echo ""
+    echo "Installation complete!"
+    echo "To apply the theme, use the 'GNOME Undercover' application or the new panel button."
+    echo "You may need to log out and back in for all changes to be visible."
+}
+
+main "$@"
