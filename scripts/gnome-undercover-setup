@@ -1,4 +1,8 @@
 #!/bin/bash
+# GNOME Undercover Installer
+# Author: John Varghese (https://github.com/John-Varghese-EH)
+# Instagram: @cyber__trinity
+# License: GPL-3.0
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
@@ -18,7 +22,6 @@ SETTINGS_FILE="$CONFIG_DIR_USER/settings.conf"
 FLUENT_GTK_THEME_REPO="https://github.com/vinceliuice/Fluent-gtk-theme.git"
 FLUENT_ICON_THEME_REPO="https://github.com/vinceliuice/Fluent-icon-theme.git"
 BIBATA_CURSOR_THEME_REPO="https://github.com/KaizIqbal/Bibata_Cursor.git"
-WINDOWS_10_THEME_REPO="https://github.com/B00merang-Project/Windows-10.git"
 WINDOWS_10_THEME_REPO="https://github.com/B00merang-Project/Windows-10.git"
 WINDOWS_10_ICONS_REPO="https://github.com/B00merang-Project/Windows-10-Icons.git"
 
@@ -72,7 +75,6 @@ install_dependencies() {
         sudo apt install -y git gnome-shell-extensions gnome-tweaks sassc libglib2.0-dev jq make gettext fonts-liberation python3-gi gir1.2-gtk-4.0
     elif command_exists dnf; then
         sudo dnf install -y git gnome-shell-extensions gnome-tweaks sassc glib2-devel jq make gettext liberation-fonts python3-gobject gtk4
-    elif command_exists pacman; then
     elif command_exists pacman; then
         sudo pacman -Syu --noconfirm git gnome-shell-extensions gnome-tweaks sassc glib2 jq make gettext ttf-liberation python-gobject gtk4
     elif command_exists zypper; then
@@ -212,7 +214,6 @@ install_extra_extensions() {
     msg "Installing Dash to Panel and ArcMenu..."
     
     # Dash to Panel
-    # Dash to Panel
     msg "Cloning Dash to Panel..."
     git_clone_or_update "https://github.com/home-sweet-gnome/dash-to-panel.git" "dash-to-panel"
     (
@@ -221,7 +222,6 @@ install_extra_extensions() {
     )
     msg "Dash to Panel installed."
 
-    # ArcMenu
     # ArcMenu
     msg "Cloning ArcMenu..."
     git_clone_or_update "https://gitlab.com/arcmenu/ArcMenu.git" "ArcMenu"
@@ -233,10 +233,8 @@ install_extra_extensions() {
     
     msg "Enabling extra extensions..."
     gnome-extensions enable "dash-to-panel@jderose9.github.com"
-    gnome-extensions enable "arcmenu@arcmenu.com" # Note: UUID might differ, checking...
-    # ArcMenu often uses arcmenu@arcmenu.com or arc-menu@linxgem33.com depending on version. 
-    # The make install usually installs to arcmenu@arcmenu.com
-
+    gnome-extensions enable "arcmenu@arcmenu.com"
+}
 
 # --- Main Execution ---
 

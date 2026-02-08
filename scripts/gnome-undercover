@@ -1,4 +1,8 @@
 #!/bin/bash
+# GNOME Undercover - Transform your GNOME desktop into Windows 10/11
+# Author: John Varghese (https://github.com/John-Varghese-EH)
+# Instagram: @cyber__trinity
+# License: GPL-3.0
 
 # Configuration
 CONFIG_DIR="$HOME/.config/gnome-undercover"

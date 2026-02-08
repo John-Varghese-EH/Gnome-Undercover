@@ -1,4 +1,8 @@
 #!/bin/bash
+# GNOME Undercover Uninstaller
+# Author: John Varghese (https://github.com/John-Varghese-EH)
+# Instagram: @cyber__trinity
+# License: GPL-3.0
 
 # --- Configuration ---
 SCRIPT_NAME="GNOME Undercover Uninstaller"
@@ -37,7 +41,7 @@ remove_themes() {
 remove_core_files() {
     msg "Removing core script and assets..."
     rm -f "$SCRIPTS_DIR_USER/gnome-undercover"
-    rm -f "$SCRIPTS_DIR_USER/gnome-undercover-settings.py"
+    rm -f "$SCRIPTS_DIR_USER/gnome-undercover-settings"
     rm -f "$APPLICATIONS_DIR_USER/gnome-undercover.desktop"
     rm -f "$APPLICATIONS_DIR_USER/gnome-undercover-settings.desktop"
     rm -f "$HOME/.local/share/icons/hicolor/scalable/apps/gnome-undercover.svg"

@@ -1,5 +1,12 @@
 # GNOME Undercover 🕵🏻
 
+[![Build](https://github.com/John-Varghese-EH/Gnome-Undercover/actions/workflows/build-deb.yml/badge.svg)](https://github.com/John-Varghese-EH/Gnome-Undercover/actions/workflows/build-deb.yml)
+[![PPA](https://img.shields.io/badge/PPA-Launchpad-E95420?logo=ubuntu&logoColor=white)](https://launchpad.net/gnome-undercover)
+[![AUR](https://img.shields.io/badge/AUR-Arch_Linux-1793D1?logo=archlinux&logoColor=white)](https://aur.archlinux.org/packages/gnome-undercover)
+[![COPR](https://img.shields.io/badge/COPR-Fedora-51A2DA?logo=fedora&logoColor=white)](https://copr.fedorainfracloud.org/coprs/gnome-undercover/)
+[![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
+[![GitHub](https://img.shields.io/github/stars/John-Varghese-EH/Gnome-Undercover?style=social)](https://github.com/John-Varghese-EH/Gnome-Undercover)
+
 **Seamlessly transform your GNOME desktop into a convincing Windows 11 environment and back—instantly, with one command or click.**
 
 This project GNOME-Undercover is to use modern Windows 11 themes and a more robust installation process. It provides a simple, one-click script that transforms your GNOME desktop into a polished Windows 11 look-alike, and safely restores your original settings when you switch back.
@@ -26,7 +33,7 @@ This project GNOME-Undercover is to use modern Windows 11 themes and a more robu
 
 ## 📦 Installation via Package Managers
 
-### 🐧 Debian/Ubuntu/Mint (`apt`)
+### 🐧 Debian/Ubuntu/Mint/Kali (`apt`)
 Hosted via **PPA** (Personal Package Archive).
 ```bash
 sudo add-apt-repository ppa:gnome-undercover/ppa
@@ -116,6 +123,15 @@ chmod +x uninstall.sh
 ./uninstall.sh
 ```
 This will safely restore your original settings, remove all installed themes and icons, and delete the scripts and launchers.
+
+---
+
+## Author
+
+**John Varghese**
+
+- GitHub: [@John-Varghese-EH](https://github.com/John-Varghese-EH)
+- Instagram: [@cyber__trinity](https://instagram.com/cyber__trinity)
 
 ---
 

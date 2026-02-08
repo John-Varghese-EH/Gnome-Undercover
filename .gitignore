@@ -1,0 +1,37 @@
+# Build artifacts
+build/
+dist/
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+
+# Debian packaging
+*.deb
+*.changes
+*.buildinfo
+*.dsc
+*.tar.gz
+*.tar.xz
+debian/.debhelper/
+debian/gnome-undercover/
+debian/files
+
+# Arch packaging
+*.pkg.tar.zst
+*.pkg.tar.xz
+pkg/
+src/
+
+# RPM packaging
+*.rpm
+rpmbuild/
+SRPMS/
+RPMS/
+
+# Temp files
+/tmp/
+*.swp
+*.swo
+*~
+.DS_Store

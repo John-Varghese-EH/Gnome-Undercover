@@ -1,0 +1,70 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y devscripts build-essential debhelper dh-python python3-all python3-setuptools
+
+      - name: Build Debian package
+        run: |
+          debuild -us -uc -b
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "GNOME Undercover ${{ github.ref_name }}"
+          body: |
+            ## 🕵🏻 GNOME Undercover ${{ github.ref_name }}
+            
+            ### Installation
+            
+            **Debian/Ubuntu (PPA):**
+            ```bash
+            sudo add-apt-repository ppa:gnome-undercover/ppa
+            sudo apt update
+            sudo apt install gnome-undercover
+            ```
+            
+            **Arch Linux (AUR):**
+            ```bash
+            yay -S gnome-undercover
+            ```
+            
+            **Manual .deb Install:**
+            Download the `.deb` file below and run:
+            ```bash
+            sudo dpkg -i gnome-undercover_${{ steps.version.outputs.VERSION }}_all.deb
+            sudo apt install -f
+            ```
+            
+            ### What's New
+            See the [CHANGELOG](https://github.com/John-Varghese-EH/Gnome-Undercover/commits/${{ github.ref_name }}) for details.
+          files: |
+            ../gnome-undercover_*.deb
+          draft: false
+          prerelease: false
+
+      - name: Notify PPA build (optional webhook)
+        if: false  # Enable when you have a webhook set up
+        run: |
+          echo "Trigger PPA build here via webhook or Launchpad API"

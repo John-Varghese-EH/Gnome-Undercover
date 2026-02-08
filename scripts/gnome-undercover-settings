@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+"""
+GNOME Undercover Settings
+Author: John Varghese (https://github.com/John-Varghese-EH)
+Instagram: @cyber__trinity
+License: GPL-3.0
+"""
 
 import shutil
 import gi
@@ -10,14 +16,19 @@ gi.require_version('Gtk', '4.0')
 from gi.repository import Gtk, Gio, GLib
 
 SCRIPT_NAME = "gnome-undercover"
-SCRIPT_PATH = os.path.expanduser("~/.local/bin/gnome-undercover")
+
+# Check system install first, then user install
+if os.path.exists("/usr/bin/gnome-undercover"):
+    SCRIPT_PATH = "/usr/bin/gnome-undercover"
+else:
+    SCRIPT_PATH = os.path.expanduser("~/.local/bin/gnome-undercover")
 
 def check_dependencies():
     """Ensure required commands are available."""
     missing = []
     if not shutil.which("gsettings"):
         missing.append("gsettings")
-    if not os.path.exists(SCRIPT_PATH):
+    if not os.path.exists(SCRIPT_PATH) and not shutil.which(SCRIPT_NAME):
         missing.append(f"Script not found at {SCRIPT_PATH}")
     
     if missing:
