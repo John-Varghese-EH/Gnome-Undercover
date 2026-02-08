@@ -1,3 +1,7 @@
+<div align="center">
+
+  <img src="gnome-undercover.png" alt="Nizhal AI Logo" width="140" />
+
 # GNOME Undercover 🕵🏻
 
 [![PPA](https://img.shields.io/badge/PPA-Launchpad-E95420?logo=ubuntu&logoColor=white)](https://launchpad.net/gnome-undercover)
@@ -9,6 +13,8 @@
 **Seamlessly transform your GNOME desktop into a convincing Windows 11 environment and back—instantly, with one command or click.**
 
 This project GNOME-Undercover is to use modern Windows 11 themes and a more robust installation process. It provides a simple, one-click script that transforms your GNOME desktop into a polished Windows 11 look-alike, and safely restores your original settings when you switch back.
+
+</div>
 
 ---
 
