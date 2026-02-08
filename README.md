@@ -1,6 +1,5 @@
 # GNOME Undercover 🕵🏻
 
-[![Build](https://github.com/John-Varghese-EH/Gnome-Undercover/actions/workflows/build-deb.yml/badge.svg)](https://github.com/John-Varghese-EH/Gnome-Undercover/actions/workflows/build-deb.yml)
 [![PPA](https://img.shields.io/badge/PPA-Launchpad-E95420?logo=ubuntu&logoColor=white)](https://launchpad.net/gnome-undercover)
 [![AUR](https://img.shields.io/badge/AUR-Arch_Linux-1793D1?logo=archlinux&logoColor=white)](https://aur.archlinux.org/packages/gnome-undercover)
 [![COPR](https://img.shields.io/badge/COPR-Fedora-51A2DA?logo=fedora&logoColor=white)](https://copr.fedorainfracloud.org/coprs/gnome-undercover/)
@@ -15,7 +14,7 @@ This project GNOME-Undercover is to use modern Windows 11 themes and a more robu
 
 > [!NOTE]
 > **🚧 Work in Progress:**  
-> This project is actively being developed! Help make it better and faster—contributions, feedback, and ideas are warmly welcome.
+> This project is actively being developed! Help make it better and faster-contributions, feedback, and ideas are warmly welcome.
 > *Star the repo and join the project!*
 
 ---
@@ -126,12 +125,30 @@ This will safely restore your original settings, remove all installed themes and
 
 ---
 
-## Author
+## 🕵️ Inspiration: Kali Undercover & Why Gnome-Undercover
 
-**John Varghese**
+The popular **Kali Undercover** mode is a fantastic tool for quickly disguising your Kali Linux desktop to look like Windows, providing privacy and blending in during sensitive situations. However, **Kali Undercover has a major limitation: it only supports the Xfce desktop environment**, which is the default for Kali Linux.  
+If you use GNOME—a modern, user-friendly, and highly customizable desktop environment—Kali Undercover simply won’t work for you.
 
-- GitHub: [@John-Varghese-EH](https://github.com/John-Varghese-EH)
-- Instagram: [@cyber__trinity](https://instagram.com/cyber__trinity)
+**Why GNOME?**  
+GNOME is increasingly popular among Kali users for its intuitive interface, advanced productivity features, and extensive customization options. With GNOME, you can enjoy a seamless workflow, elegant design, and access to a wide range of extensions and themes, making it a preferred choice for both new and experienced users.
+
+> *“Kali Linux, a powerful Debian-based distribution widely used for advanced penetration testing and network security assessments, boasts a highly customizable environment. One popular option for enhancing the user interface and improving overall usability is to install GNOME on Kali Linux, a user-friendly desktop environment.”* 
+
+**Gnome-Undercover** fills this gap by bringing undercover functionality to GNOME, allowing Kali users (and anyone running GNOME) to instantly switch between their native desktop and a convincing Windows-like environment—something Kali Undercover cannot do.
+
+---
+
+## 🎉 Fun Add-on: Activate-linux
+
+Want to take your Windows disguise to the next level?  
+Pair Gnome-Undercover with [activate-linux](https://github.com/MrGlockenspiel/activate-linux)—a hilarious open-source prank that displays the classic “Activate Windows” watermark on your Linux desktop!
+
+> **Description:**  
+> _Fool your friends, colleagues, or even yourself with a touch of Windows authenticity. **Activate-linux** is the perfect companion for your undercover adventures!_
+
+**Try it out:**  
+[github.com/MrGlockenspiel/activate-linux](https://github.com/MrGlockenspiel/activate-linux)
 
 ---
 
@@ -149,3 +166,13 @@ This project stands on the shoulders of giants. It would not be possible without
 ## 📜 License
 
 This project is licensed under the **GPLv3**. See the `LICENSE` file for details.
+
+---
+
+ Crafted with ❤️ by **[John Varghese](https://github.com/John-Varghese-EH)**  
+> 
+  [![Buy me a Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/CyberTrinity)
+  [![Patreon](https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white)](https://patreon.com/CyberTrinity)
+  [![Sponsor](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#white)](https://github.com/sponsors/John-Varghese-EH)
+
+---
