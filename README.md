@@ -10,7 +10,7 @@
 [![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 [![GitHub](https://img.shields.io/github/stars/John-Varghese-EH/Gnome-Undercover?style=social)](https://github.com/John-Varghese-EH/Gnome-Undercover)
 
-**Seamlessly transform your GNOME desktop into a convincing Windows 11 environment and back—instantly, with one command or click.**
+**Seamlessly transform your GNOME desktop into a convincing Windows 11 environment and back-instantly, with one command or click.**
 
 This project GNOME-Undercover is to use modern Windows 11 themes and a more robust installation process. It provides a simple, one-click script that transforms your GNOME desktop into a polished Windows 11 look-alike, and safely restores your original settings when you switch back.
 
@@ -134,7 +134,7 @@ This will safely restore your original settings, remove all installed themes and
 ## 🕵️ Inspiration: Kali Undercover & Why Gnome-Undercover
 
 The popular **Kali Undercover** mode is a fantastic tool for quickly disguising your Kali Linux desktop to look like Windows, providing privacy and blending in during sensitive situations. However, **Kali Undercover has a major limitation: it only supports the Xfce desktop environment**, which is the default for Kali Linux.  
-If you use GNOME—a modern, user-friendly, and highly customizable desktop environment—Kali Undercover simply won’t work for you.
+If you use GNOME-a modern, user-friendly, and highly customizable desktop environment—Kali Undercover simply won’t work for you.
 
 **Why GNOME?**  
 GNOME is increasingly popular among Kali users for its intuitive interface, advanced productivity features, and extensive customization options. With GNOME, you can enjoy a seamless workflow, elegant design, and access to a wide range of extensions and themes, making it a preferred choice for both new and experienced users.
@@ -148,7 +148,7 @@ GNOME is increasingly popular among Kali users for its intuitive interface, adva
 ## 🎉 Fun Add-on: Activate-linux
 
 Want to take your Windows disguise to the next level?  
-Pair Gnome-Undercover with [activate-linux](https://github.com/MrGlockenspiel/activate-linux)—a hilarious open-source prank that displays the classic “Activate Windows” watermark on your Linux desktop!
+Pair Gnome-Undercover with [activate-linux](https://github.com/MrGlockenspiel/activate-linux)-a hilarious open-source prank that displays the classic “Activate Windows” watermark on your Linux desktop!
 
 > **Description:**  
 > _Fool your friends, colleagues, or even yourself with a touch of Windows authenticity. **Activate-linux** is the perfect companion for your undercover adventures!_
