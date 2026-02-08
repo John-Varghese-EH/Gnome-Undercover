@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="gnome-undercover.png" alt="Nizhal AI Logo" width="140" />
+  <img src="gnome-undercover.png" alt="Gnome Undercover Logo" width="140" />
 
 # GNOME Undercover 🕵🏻
 
@@ -142,6 +142,25 @@ GNOME is increasingly popular among Kali users for its intuitive interface, adva
 > *“Kali Linux, a powerful Debian-based distribution widely used for advanced penetration testing and network security assessments, boasts a highly customizable environment. One popular option for enhancing the user interface and improving overall usability is to install GNOME on Kali Linux, a user-friendly desktop environment.”* 
 
 **Gnome-Undercover** fills this gap by bringing undercover functionality to GNOME, allowing Kali users (and anyone running GNOME) to instantly switch between their native desktop and a convincing Windows-like environment—something Kali Undercover cannot do.
+
+---
+
+## Using Hyperland? Check out Hyperland-Undercover!
+
+<div align="center">
+
+[![Hyperland Undercover](https://img.shields.io/badge/Hyperland_Undercover-Project-4A86CF?style=for-the-badge&logo=gnome&logoColor=white)](https://github.com/John-Varghese-EH/Hyperland-Undercover)
+
+</div>
+
+If you're using **Hyperland** instead of Hyprland, check out **[Hyperland-Undercover](https://github.com/John-Varghese-EH/Hyperland-Undercover)** - the sister project that transforms your Hyperland desktop into Windows 10/11 with:
+
+- ✨ Waybar for Windows-style taskbar
+- 🚀 Rofi/Wofi for Windows-style start menu
+- 🎨 Fluent GTK themes and icons
+- 🔄 One-click toggle between Hyperland and Windows mode
+
+**[👉 Get Hyperland-Undercover](https://github.com/John-Varghese-EH/Hyperland-Undercover)**
 
 ---
 
