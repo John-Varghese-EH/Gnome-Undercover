@@ -26,7 +26,7 @@ WINDOWS_10_THEME_REPO="https://github.com/B00merang-Project/Windows-10.git"
 WINDOWS_10_ICONS_REPO="https://github.com/B00merang-Project/Windows-10-Icons.git"
 
 # Detect source directory
-if [ -d "/usr/share/gnome-undercover" ]; then
+if [[ -d "/usr/share/gnome-undercover" ]]; then
     SOURCE_ROOT="/usr/share/gnome-undercover"
     IS_SYSTEM_INSTALL=true
 else
@@ -41,7 +41,7 @@ git_clone_or_update() {
     local repo_url="$1"
     local dest_dir="$2"
     
-    if [ -d "$dest_dir" ]; then
+    if [[ -d "$dest_dir" ]]; then
         msg "Directory $dest_dir already exists. Skipping clone (or updating)..."
         # Optional: (cd "$dest_dir" && git pull)
     else
@@ -127,7 +127,7 @@ install_core_files() {
     msg "Installing core script and assets..."
 
     # Install the main script only if not a system install
-    if [ "$IS_SYSTEM_INSTALL" = false ]; then
+    if [[ "$IS_SYSTEM_INSTALL" = false ]]; then
         mkdir -p "$SCRIPTS_DIR_USER"
         cp "$SOURCE_ROOT/scripts/gnome-undercover" "$SCRIPTS_DIR_USER/gnome-undercover"
         chmod +x "$SCRIPTS_DIR_USER/gnome-undercover"
@@ -144,7 +144,7 @@ install_core_files() {
     local icon_to_find="start-here.svg"
     local icon_path=$(find "$ICONS_DIR_USER/Fluent-Dark" -name "$icon_to_find" -o -name "distributor-logo-windows.svg" | head -n 1)
 
-    if [ -n "$icon_path" ]; then
+    if [[ -n "$icon_path" ]]; then
         msg "Found icon for desktop shortcut at $icon_path"
         mkdir -p "$HOME/.local/share/icons/hicolor/scalable/apps"
         cp "$icon_path" "$HOME/.local/share/icons/hicolor/scalable/apps/gnome-undercover.svg"
@@ -164,7 +164,7 @@ install_core_files() {
     # Install Settings App
     msg "Installing configuration app..."
     
-    if [ "$IS_SYSTEM_INSTALL" = false ]; then
+    if [[ "$IS_SYSTEM_INSTALL" = false ]]; then
         cp "$SOURCE_ROOT/scripts/gnome-undercover-settings" "$SCRIPTS_DIR_USER/gnome-undercover-settings"
         chmod +x "$SCRIPTS_DIR_USER/gnome-undercover-settings"
         EXEC_PATH="$SCRIPTS_DIR_USER/gnome-undercover-settings"
@@ -194,7 +194,7 @@ install_extension() {
     local extension_uuid
     extension_uuid=$(jq -r '.uuid' "gnome-undercover-extension/metadata.json")
 
-    if [ -z "$extension_uuid" ]; then
+    if [[ -z "$extension_uuid" ]]; then
         error "Could not read UUID from metadata.json. Is 'jq' installed?"
     fi
 

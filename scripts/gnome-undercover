@@ -19,7 +19,7 @@ WINDOWS_SHELL_THEME="Fluent-round-${THEME_COLOR}-${THEME_MODE}"
 WINDOWS_ICON_THEME="Fluent-${THEME_COLOR}-${THEME_MODE}"
 WINDOWS_CURSOR_THEME="Bibata-Modern-Ice"
 # Wallpaper path
-if [ -f "/usr/share/backgrounds/gnome-undercover/wallpaper.png" ]; then
+if [[ -f "/usr/share/backgrounds/gnome-undercover/wallpaper.png" ]]; then
     WALLPAPER_PATH="/usr/share/backgrounds/gnome-undercover/wallpaper.png"
 else
     WALLPAPER_PATH="$HOME/.local/share/backgrounds/gnome-undercover/wallpaper.png"
@@ -36,12 +36,12 @@ mkdir -p "$CONFIG_DIR"
 
 # Load user settings
 SETTINGS_FILE="$CONFIG_DIR/settings.conf"
-if [ -f "$SETTINGS_FILE" ]; then
+if [[ -f "$SETTINGS_FILE" ]]; then
     source "$SETTINGS_FILE"
 fi
 
 function save_original_settings() {
-    if [ ! -f "$ORIGINAL_SETTINGS_FILE" ]; then
+    if [[ ! -f "$ORIGINAL_SETTINGS_FILE" ]]; then
         echo "Saving original GNOME settings..."
         # Using gsettings get to capture current settings
         echo "ORIGINAL_GTK_THEME='$(gsettings get org.gnome.desktop.interface gtk-theme)'" > "$ORIGINAL_SETTINGS_FILE"
@@ -84,7 +84,7 @@ function switch_to_windows() {
 
 function switch_to_gnome() {
     echo "Switching back to original GNOME theme..."
-    if [ -f "$ORIGINAL_SETTINGS_FILE" ]; then
+    if [[ -f "$ORIGINAL_SETTINGS_FILE" ]]; then
         source "$ORIGINAL_SETTINGS_FILE"
 
         gsettings set org.gnome.desktop.interface gtk-theme "$ORIGINAL_GTK_THEME"
@@ -99,10 +99,10 @@ function switch_to_gnome() {
         restore_arcmenu_settings
 
         # Restore extension states
-        if [ "$ORIGINAL_DASH_TO_PANEL_ENABLED" -eq 0 ]; then
+        if [[ "$ORIGINAL_DASH_TO_PANEL_ENABLED" -eq 0 ]]; then
             gnome-extensions disable $DASH_TO_PANEL_UUID
         fi
-        if [ "$ORIGINAL_ARCMENU_ENABLED" -eq 0 ]; then
+        if [[ "$ORIGINAL_ARCMENU_ENABLED" -eq 0 ]]; then
             gnome-extensions disable $ARCMENU_UUID
         fi
 
@@ -156,7 +156,7 @@ function configure_arcmenu_windows() {
     gsettings set $schema menu-layout 'Eleven'
     gsettings set $schema menu-button-icon 'Custom_Icon'
     # Use the icon path from the settings file
-    if [ -n "$ARCMENU_ICON_PATH" ]; then
+    if [[ -n "$ARCMENU_ICON_PATH" ]]; then
         gsettings set $schema custom-menu-button-icon "$ARCMENU_ICON_PATH"
     fi
     gsettings set $schema position-in-panel 'Center'
@@ -176,7 +176,7 @@ function restore_arcmenu_settings() {
 save_original_settings
 
 # Toggle between states
-if [ -f "$STATE_FILE" ]; then
+if [[ -f "$STATE_FILE" ]]; then
     # Currently in Windows mode, switch back to GNOME
     switch_to_gnome
 else

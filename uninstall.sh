@@ -86,10 +86,10 @@ main() {
     fi
 
     # It's good practice to switch back before uninstalling
-    if [ -f "$SCRIPTS_DIR_USER/gnome-undercover" ]; then
+    if [[ -f "$SCRIPTS_DIR_USER/gnome-undercover" ]]; then
         msg "Attempting to restore original GNOME settings first..."
         # We need to check if it's in Windows mode before running
-        if [ -f "$HOME/.config/gnome-undercover/state" ]; then
+        if [[ -f "$HOME/.config/gnome-undercover/state" ]]; then
              "$SCRIPTS_DIR_USER/gnome-undercover"
         fi
     fi
