@@ -29,11 +29,11 @@ This project GNOME-Undercover is to use modern Windows 11 themes and a more robu
 ### 🐧 Debian/Ubuntu/Mint (`apt`)
 Hosted via **PPA** (Personal Package Archive).
 ```bash
-sudo add-apt-repository ppa:john-varghese/gnome-undercover
+sudo add-apt-repository ppa:gnome-undercover/ppa
 sudo apt update
 sudo apt install gnome-undercover
 ```
-*(Note: You need to set up this PPA on Launchpad first)*
+*(Official Launchpad PPA: [launchpad.net/gnome-undercover](https://launchpad.net/gnome-undercover))*
 
 ### 🏹 Arch Linux/Manjaro (`pacman`)
 Available via **AUR** (Arch User Repository).
