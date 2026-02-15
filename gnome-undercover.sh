@@ -101,27 +101,27 @@ function apply_windows_theme() {
 }
 
 function configure_extensions() {
+    # Common icon path for both Windows versions
+    local icon_path="'/usr/share/icons/Windows-10/scalable/places/start-here-symbolic.svg'"
+    
     # ArcMenu: Set Layout
     if [[ "$TARGET_VERSION" == "win10" ]]; then
         _dconf write /org/gnome/shell/extensions/arcmenu/menu-layout "'Windows'" || true
-        _dconf write /org/gnome/shell/extensions/arcmenu/arc-menu-icon "'Custom_Icon'" || true
-        # Win10 icon path - might need adjustment if file names differ
-         _dconf write /org/gnome/shell/extensions/arcmenu/custom-menu-button-icon "'/usr/share/icons/Windows-10/scalable/places/start-here-symbolic.svg'" || true 
-         
-         # Dash to Panel: Left position
-         _dconf write /org/gnome/shell/extensions/dash-to-panel/panel-position "'BOTTOM'" || true
-         _dconf write /org/gnome/shell/extensions/dash-to-panel/taskbar-position "'LEFT'" || true
+        # Dash to Panel: Left position
+        _dconf write /org/gnome/shell/extensions/dash-to-panel/taskbar-position "'LEFT'" || true
     else
-         # Windows 11
+        # Windows 11
         _dconf write /org/gnome/shell/extensions/arcmenu/menu-layout "'Eleven'" || true
-        _dconf write /org/gnome/shell/extensions/arcmenu/arc-menu-icon "'Custom_Icon'" || true
-        _dconf write /org/gnome/shell/extensions/arcmenu/custom-menu-button-icon "'/usr/share/icons/Windows-10/scalable/places/start-here-symbolic.svg'" || true 
-        
         # Dash to Panel: Center position
-        _dconf write /org/gnome/shell/extensions/dash-to-panel/panel-position "'BOTTOM'" || true
         _dconf write /org/gnome/shell/extensions/dash-to-panel/taskbar-position "'CENTEREDMONITOR'" || true
     fi
     
+    # Common ArcMenu settings for both versions
+    _dconf write /org/gnome/shell/extensions/arcmenu/arc-menu-icon "'Custom_Icon'" || true
+    _dconf write /org/gnome/shell/extensions/arcmenu/custom-menu-button-icon "$icon_path" || true
+    
+    # Common Dash to Panel settings for both versions
+    _dconf write /org/gnome/shell/extensions/dash-to-panel/panel-position "'BOTTOM'" || true
     _dconf write /org/gnome/shell/extensions/dash-to-panel/appicon-margin "4" || true
     _dconf write /org/gnome/shell/extensions/dash-to-panel/trans-panel-opacity "0.8" || true
 }
@@ -135,11 +135,22 @@ function set_terminal_profile() {
         return
     fi
 
-    local uuid
-    uuid=$(echo "$profile_list" | grep -oP "'\K[^']+" | while read -r id; do
-        name=$(_gsettings get "org.gnome.Terminal.Legacy.Profile:/org/gnome/Terminal/Legacy/Profiles:/:$id/" visible-name)
-        [[ "$name" == "'$profile_name'" ]] && echo "$id"
-    done | head -n1)
+    # Extract all profile IDs at once to avoid loop with multiple gsettings calls
+    local uuid=""
+    local profile_ids
+    profile_ids=$(echo "$profile_list" | grep -oP "'\K[^']+")
+    
+    # For each profile ID, check the name in a single pass
+    for id in $profile_ids; do
+        local name
+        # Suppress errors for profiles that might not exist - this is expected
+        name=$(_gsettings get "org.gnome.Terminal.Legacy.Profile:/org/gnome/Terminal/Legacy/Profiles:/:$id/" visible-name 2>/dev/null)
+        if [[ "$name" == "'$profile_name'" ]]; then
+            uuid="$id"
+            break  # Stop as soon as we find it
+        fi
+    done
+    
     if [[ -n "$uuid" ]]; then
         _gsettings set org.gnome.Terminal.ProfilesList default "$uuid"
     else

@@ -19,8 +19,29 @@ class GnomeUndercoverIndicator extends PanelMenu.Button {
             style_class: 'system-status-icon',
         }));
 
+        // Cache script paths on initialization to avoid repeated lookups
+        this._cacheScriptPaths();
+
         // Create Menu Items
         this._buildMenu();
+    }
+
+    _cacheScriptPaths() {
+        // Cache gnome-undercover command path
+        try {
+            const [res, out, err, status] = GLib.spawn_command_line_sync(`which ${GNOME_UNDERCOVER_COMMAND}`);
+            this._undercoverPath = status === 0 ? new TextDecoder().decode(out).trim() : null;
+        } catch (e) {
+            this._undercoverPath = null;
+        }
+
+        // Cache settings command path
+        try {
+            const [res, out, err, status] = GLib.spawn_command_line_sync(`which ${SETTINGS_COMMAND}`);
+            this._settingsPath = status === 0 ? new TextDecoder().decode(out).trim() : null;
+        } catch (e) {
+            this._settingsPath = null;
+        }
     }
 
     _buildMenu() {
@@ -40,11 +61,8 @@ class GnomeUndercoverIndicator extends PanelMenu.Button {
 
     _toggleUndercover() {
         try {
-            // Find the script in standard locations
-            const [res, out, err, status] = GLib.spawn_command_line_sync(`which ${GNOME_UNDERCOVER_COMMAND}`);
-            if (status === 0) {
-                const scriptPath = new TextDecoder().decode(out).trim();
-                GLib.spawn_command_line_async(scriptPath);
+            if (this._undercoverPath) {
+                GLib.spawn_command_line_async(this._undercoverPath);
             } else {
                 Main.notifyError('GNOME Undercover', `Script not found: ${GNOME_UNDERCOVER_COMMAND}`);
             }
@@ -54,10 +72,8 @@ class GnomeUndercoverIndicator extends PanelMenu.Button {
     }
     _openSettings() {
         try {
-            const [res, out, err, status] = GLib.spawn_command_line_sync(`which ${SETTINGS_COMMAND}`);
-            if (status === 0) {
-                const scriptPath = new TextDecoder().decode(out).trim();
-                GLib.spawn_command_line_async(scriptPath);
+            if (this._settingsPath) {
+                GLib.spawn_command_line_async(this._settingsPath);
             } else {
                 Main.notifyError('GNOME Undercover', `Settings app not found: ${SETTINGS_COMMAND}`);
             }
