@@ -101,27 +101,27 @@ function apply_windows_theme() {
 }
 
 function configure_extensions() {
+    # Common icon path for both Windows versions
+    local icon_path="'/usr/share/icons/Windows-10/scalable/places/start-here-symbolic.svg'"
+    
     # ArcMenu: Set Layout
     if [[ "$TARGET_VERSION" == "win10" ]]; then
         _dconf write /org/gnome/shell/extensions/arcmenu/menu-layout "'Windows'" || true
-        _dconf write /org/gnome/shell/extensions/arcmenu/arc-menu-icon "'Custom_Icon'" || true
-        # Win10 icon path - might need adjustment if file names differ
-         _dconf write /org/gnome/shell/extensions/arcmenu/custom-menu-button-icon "'/usr/share/icons/Windows-10/scalable/places/start-here-symbolic.svg'" || true 
-         
-         # Dash to Panel: Left position
-         _dconf write /org/gnome/shell/extensions/dash-to-panel/panel-position "'BOTTOM'" || true
-         _dconf write /org/gnome/shell/extensions/dash-to-panel/taskbar-position "'LEFT'" || true
+        # Dash to Panel: Left position
+        _dconf write /org/gnome/shell/extensions/dash-to-panel/taskbar-position "'LEFT'" || true
     else
-         # Windows 11
+        # Windows 11
         _dconf write /org/gnome/shell/extensions/arcmenu/menu-layout "'Eleven'" || true
-        _dconf write /org/gnome/shell/extensions/arcmenu/arc-menu-icon "'Custom_Icon'" || true
-        _dconf write /org/gnome/shell/extensions/arcmenu/custom-menu-button-icon "'/usr/share/icons/Windows-10/scalable/places/start-here-symbolic.svg'" || true 
-        
         # Dash to Panel: Center position
-        _dconf write /org/gnome/shell/extensions/dash-to-panel/panel-position "'BOTTOM'" || true
         _dconf write /org/gnome/shell/extensions/dash-to-panel/taskbar-position "'CENTEREDMONITOR'" || true
     fi
     
+    # Common ArcMenu settings for both versions
+    _dconf write /org/gnome/shell/extensions/arcmenu/arc-menu-icon "'Custom_Icon'" || true
+    _dconf write /org/gnome/shell/extensions/arcmenu/custom-menu-button-icon "$icon_path" || true
+    
+    # Common Dash to Panel settings for both versions
+    _dconf write /org/gnome/shell/extensions/dash-to-panel/panel-position "'BOTTOM'" || true
     _dconf write /org/gnome/shell/extensions/dash-to-panel/appicon-margin "4" || true
     _dconf write /org/gnome/shell/extensions/dash-to-panel/trans-panel-opacity "0.8" || true
 }
