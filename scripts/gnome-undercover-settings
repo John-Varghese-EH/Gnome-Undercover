@@ -63,22 +63,7 @@ class GnomeUndercoverSettings(Gtk.Application):
         desc.set_css_classes(["dim-label"])
         main_box.append(desc)
 
-        # Switch Row
-        switch_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
-        switch_box.set_homogeneous(False)
-        main_box.append(switch_box)
-
-        switch_label = Gtk.Label(label="Windows 11 Mode")
-        switch_label.set_hexpand(True)
-        switch_label.set_halign(Gtk.Align.START)
-        switch_box.append(switch_label)
-
-        self.switch = Gtk.Switch()
-        self.switch.set_active(self.check_status())
-        self.switch.connect("state-set", self.on_switch_state_set)
-        switch_box.append(self.switch)
-
-        # Version Selector Row
+        # Version Selector Row (create before switch to avoid AttributeError)
         version_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         version_box.set_homogeneous(False)
         main_box.append(version_box)
@@ -94,6 +79,21 @@ class GnomeUndercoverSettings(Gtk.Application):
         self.version_combo.set_active_id("win11") # Default
         self.version_combo.connect("changed", self.on_version_changed)
         version_box.append(self.version_combo)
+
+        # Switch Row
+        switch_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        switch_box.set_homogeneous(False)
+        main_box.append(switch_box)
+
+        switch_label = Gtk.Label(label="Windows 11 Mode")
+        switch_label.set_hexpand(True)
+        switch_label.set_halign(Gtk.Align.START)
+        switch_box.append(switch_label)
+
+        self.switch = Gtk.Switch()
+        self.switch.set_active(self.check_status())
+        self.switch.connect("state-set", self.on_switch_state_set)
+        switch_box.append(self.switch)
 
         # Separator
         main_box.append(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
@@ -122,11 +122,12 @@ class GnomeUndercoverSettings(Gtk.Application):
             )
             is_active = "Fluent" in result.stdout or "Windows-10" in result.stdout
             
-            # Try to guess version to set combo box
-            if "Windows-10" in result.stdout:
-                self.version_combo.set_active_id("win10")
-            elif "Fluent" in result.stdout:
-                self.version_combo.set_active_id("win11")
+            # Try to guess version to set combo box if it exists
+            if hasattr(self, 'version_combo'):
+                if "Windows-10" in result.stdout:
+                    self.version_combo.set_active_id("win10")
+                elif "Fluent" in result.stdout:
+                    self.version_combo.set_active_id("win11")
                 
             return is_active
         except:
