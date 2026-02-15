@@ -94,17 +94,17 @@ install_themes() {
 
     msg "Clone/Install Fluent GTK theme..."
     git_clone_or_update "$FLUENT_GTK_THEME_REPO" "Fluent-gtk-theme"
-    cd Fluent-gtk-theme && ./install.sh --tweaks round -c dark -t teal --dest "$THEME_DIR_USER"
+    cd Fluent-gtk-theme && ./install.sh --tweaks round -c dark -t teal --dest "$THEME_DIR_USER" || { cd "$TEMP_DIR"; exit 1; }
     cd "$TEMP_DIR"
 
     msg "Clone/Install Fluent icon theme..."
     git_clone_or_update "$FLUENT_ICON_THEME_REPO" "Fluent-icon-theme"
-    cd Fluent-icon-theme && ./install.sh -c teal --dest "$ICONS_DIR_USER"
+    cd Fluent-icon-theme && ./install.sh -c teal --dest "$ICONS_DIR_USER" || { cd "$TEMP_DIR"; exit 1; }
     cd "$TEMP_DIR"
 
     msg "Clone/Install Bibata cursor theme..."
     git_clone_or_update "$BIBATA_CURSOR_THEME_REPO" "Bibata_Cursor"
-    cd Bibata_Cursor && ./install.sh
+    cd Bibata_Cursor && ./install.sh || { cd "$TEMP_DIR"; exit 1; }
     cd "$TEMP_DIR"
 
     msg "Clone/Install Windows 10 themes..."
@@ -219,13 +219,15 @@ install_extra_extensions() {
     # Dash to Panel
     msg "Cloning Dash to Panel..."
     git_clone_or_update "https://github.com/home-sweet-gnome/dash-to-panel.git" "dash-to-panel"
-    cd "$TEMP_DIR/dash-to-panel" && make install
+    cd "$TEMP_DIR/dash-to-panel" && make install || { cd "$TEMP_DIR"; exit 1; }
+    cd "$TEMP_DIR"
     msg "Dash to Panel installed."
 
     # ArcMenu
     msg "Cloning ArcMenu..."
     git_clone_or_update "https://gitlab.com/arcmenu/ArcMenu.git" "ArcMenu"
-    cd "$TEMP_DIR/ArcMenu" && make install
+    cd "$TEMP_DIR/ArcMenu" && make install || { cd "$TEMP_DIR"; exit 1; }
+    cd "$TEMP_DIR"
     msg "ArcMenu installed."
     
     msg "Enabling extra extensions..."

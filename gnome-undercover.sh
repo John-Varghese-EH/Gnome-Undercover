@@ -143,6 +143,7 @@ function set_terminal_profile() {
     # For each profile ID, check the name in a single pass
     for id in $profile_ids; do
         local name
+        # Suppress errors for profiles that might not exist - this is expected
         name=$(_gsettings get "org.gnome.Terminal.Legacy.Profile:/org/gnome/Terminal/Legacy/Profiles:/:$id/" visible-name 2>/dev/null)
         if [[ "$name" == "'$profile_name'" ]]; then
             uuid="$id"
