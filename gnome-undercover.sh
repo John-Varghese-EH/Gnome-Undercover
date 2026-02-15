@@ -135,11 +135,21 @@ function set_terminal_profile() {
         return
     fi
 
-    local uuid
-    uuid=$(echo "$profile_list" | grep -oP "'\K[^']+" | while read -r id; do
-        name=$(_gsettings get "org.gnome.Terminal.Legacy.Profile:/org/gnome/Terminal/Legacy/Profiles:/:$id/" visible-name)
-        [[ "$name" == "'$profile_name'" ]] && echo "$id"
-    done | head -n1)
+    # Extract all profile IDs at once to avoid loop with multiple gsettings calls
+    local uuid=""
+    local profile_ids
+    profile_ids=$(echo "$profile_list" | grep -oP "'\K[^']+")
+    
+    # For each profile ID, check the name in a single pass
+    for id in $profile_ids; do
+        local name
+        name=$(_gsettings get "org.gnome.Terminal.Legacy.Profile:/org/gnome/Terminal/Legacy/Profiles:/:$id/" visible-name 2>/dev/null)
+        if [[ "$name" == "'$profile_name'" ]]; then
+            uuid="$id"
+            break  # Stop as soon as we find it
+        fi
+    done
+    
     if [[ -n "$uuid" ]]; then
         _gsettings set org.gnome.Terminal.ProfilesList default "$uuid"
     else

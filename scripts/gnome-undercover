@@ -43,17 +43,22 @@ fi
 function save_original_settings() {
     if [[ ! -f "$ORIGINAL_SETTINGS_FILE" ]]; then
         echo "Saving original GNOME settings..."
-        # Using gsettings get to capture current settings
-        echo "ORIGINAL_GTK_THEME='$(gsettings get org.gnome.desktop.interface gtk-theme)'" > "$ORIGINAL_SETTINGS_FILE"
-        echo "ORIGINAL_ICON_THEME='$(gsettings get org.gnome.desktop.interface icon-theme)'" >> "$ORIGINAL_SETTINGS_FILE"
-        echo "ORIGINAL_CURSOR_THEME='$(gsettings get org.gnome.desktop.interface cursor-theme)'" >> "$ORIGINAL_SETTINGS_FILE"
-        echo "ORIGINAL_SHELL_THEME='$(gsettings get org.gnome.shell.extensions.user-theme name)'" >> "$ORIGINAL_SETTINGS_FILE"
-        echo "ORIGINAL_WALLPAPER_URI='$(gsettings get org.gnome.desktop.background picture-uri)'" >> "$ORIGINAL_SETTINGS_FILE"
-        echo "ORIGINAL_WALLPAPER_URI_DARK='$(gsettings get org.gnome.desktop.background picture-uri-dark)'" >> "$ORIGINAL_SETTINGS_FILE"
+        
+        # Batch gsettings get calls to reduce command overhead
+        {
+            echo "ORIGINAL_GTK_THEME='$(gsettings get org.gnome.desktop.interface gtk-theme)'"
+            echo "ORIGINAL_ICON_THEME='$(gsettings get org.gnome.desktop.interface icon-theme)'"
+            echo "ORIGINAL_CURSOR_THEME='$(gsettings get org.gnome.desktop.interface cursor-theme)'"
+            echo "ORIGINAL_SHELL_THEME='$(gsettings get org.gnome.shell.extensions.user-theme name)'"
+            echo "ORIGINAL_WALLPAPER_URI='$(gsettings get org.gnome.desktop.background picture-uri)'"
+            echo "ORIGINAL_WALLPAPER_URI_DARK='$(gsettings get org.gnome.desktop.background picture-uri-dark)'"
+        } > "$ORIGINAL_SETTINGS_FILE"
 
-        # Save enabled state of our extensions
-        echo "ORIGINAL_DASH_TO_PANEL_ENABLED=$(gnome-extensions list --enabled | grep -c $DASH_TO_PANEL_UUID)" >> "$ORIGINAL_SETTINGS_FILE"
-        echo "ORIGINAL_ARCMENU_ENABLED=$(gnome-extensions list --enabled | grep -c $ARCMENU_UUID)" >> "$ORIGINAL_SETTINGS_FILE"
+        # Save enabled state of our extensions in one command each
+        local enabled_extensions
+        enabled_extensions=$(gnome-extensions list --enabled)
+        echo "ORIGINAL_DASH_TO_PANEL_ENABLED=$(echo "$enabled_extensions" | grep -c $DASH_TO_PANEL_UUID)" >> "$ORIGINAL_SETTINGS_FILE"
+        echo "ORIGINAL_ARCMENU_ENABLED=$(echo "$enabled_extensions" | grep -c $ARCMENU_UUID)" >> "$ORIGINAL_SETTINGS_FILE"
 
         echo "Original settings saved to $ORIGINAL_SETTINGS_FILE"
     fi
@@ -116,13 +121,16 @@ function switch_to_gnome() {
 function configure_dash_to_panel_windows() {
     echo "Configuring Dash-to-Panel..."
     local schema="org.gnome.shell.extensions.dash-to-panel"
-    # Save original settings before changing them
-    echo "DTP_PANEL_POSITIONS='$(gsettings get $schema panel-positions)'" >> "$ORIGINAL_SETTINGS_FILE"
-    echo "DTP_PANEL_SIZES='$(gsettings get $schema panel-sizes)'" >> "$ORIGINAL_SETTINGS_FILE"
-    echo "DTP_SHOW_ACTIVITIES='$(gsettings get $schema show-activities-button)'" >> "$ORIGINAL_SETTINGS_FILE"
-    echo "DTP_GROUP_APPS='$(gsettings get $schema group-apps)'" >> "$ORIGINAL_SETTINGS_FILE"
-    echo "DTP_INTELLIHIDE='$(gsettings get $schema intellihide)'" >> "$ORIGINAL_SETTINGS_FILE"
-    echo "DTP_ELEMENT_POSITIONS='$(gsettings get $schema panel-element-positions)'" >> "$ORIGINAL_SETTINGS_FILE"
+    
+    # Save original settings before changing them - batch writes
+    {
+        echo "DTP_PANEL_POSITIONS='$(gsettings get $schema panel-positions)'"
+        echo "DTP_PANEL_SIZES='$(gsettings get $schema panel-sizes)'"
+        echo "DTP_SHOW_ACTIVITIES='$(gsettings get $schema show-activities-button)'"
+        echo "DTP_GROUP_APPS='$(gsettings get $schema group-apps)'"
+        echo "DTP_INTELLIHIDE='$(gsettings get $schema intellihide)'"
+        echo "DTP_ELEMENT_POSITIONS='$(gsettings get $schema panel-element-positions)'"
+    } >> "$ORIGINAL_SETTINGS_FILE"
 
     # Apply Windows 11 settings
     gsettings set $schema panel-positions '{ "0": "BOTTOM" }'
@@ -146,11 +154,14 @@ function restore_dash_to_panel_settings() {
 function configure_arcmenu_windows() {
     echo "Configuring ArcMenu..."
     local schema="org.gnome.shell.extensions.arcmenu"
-    # Save original settings
-    echo "AM_MENU_LAYOUT='$(gsettings get $schema menu-layout)'" >> "$ORIGINAL_SETTINGS_FILE"
-    echo "AM_MENU_ICON='$(gsettings get $schema menu-button-icon)'" >> "$ORIGINAL_SETTINGS_FILE"
-    echo "AM_CUSTOM_ICON='$(gsettings get $schema custom-menu-button-icon)'" >> "$ORIGINAL_SETTINGS_FILE"
-    echo "AM_POSITION='$(gsettings get $schema position-in-panel)'" >> "$ORIGINAL_SETTINGS_FILE"
+    
+    # Save original settings - batch writes
+    {
+        echo "AM_MENU_LAYOUT='$(gsettings get $schema menu-layout)'"
+        echo "AM_MENU_ICON='$(gsettings get $schema menu-button-icon)'"
+        echo "AM_CUSTOM_ICON='$(gsettings get $schema custom-menu-button-icon)'"
+        echo "AM_POSITION='$(gsettings get $schema position-in-panel)'"
+    } >> "$ORIGINAL_SETTINGS_FILE"
 
     # Apply Windows 11 settings
     gsettings set $schema menu-layout 'Eleven'
